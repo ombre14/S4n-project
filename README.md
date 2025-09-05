@@ -1,6 +1,6 @@
 
 <h1 align="center">
-  🧠✨ ZaRaki AI — Messenger Bot
+  🫴🖤🪽 S4n  — Messenger Bot
 </h1>
 
 <p align="center">
@@ -117,9 +117,9 @@ node index.js
 
 ## 👨‍💻 Maintainer
 
-**👤 Voldigo zaraki anos**  
-🔗 [Facebook Profile](https://facebook.com/voldigo.zaraki)  
-📧 chitronbhattacharjee@gmail.com  
+**🥷 Cédric san **  
+🔗 [Facebook Profile](https://facebook.com/cedricsan0208)  
+📧 rosius1402@gmail.com 
 🌐 [My Dev Commands Collection (coming soon)](https://github.com/voldy-coder)
 
 ---
@@ -129,8 +129,8 @@ node index.js
 | Source | Credit |
 |--------|--------|
 | 🐐 Base Bot | [GoatBot by NTkhang](https://github.com/ntkhang03/goatbot-v2) |
-| ✨ Fork + Refactor | Voldigo Zaraki Anos|
-| 🎨 Style + Canvas | Custom rewritten by Voldigo |
+| ✨ Fork + Refactor | C3dric S4n|
+| 🎨 Style + Canvas | Custom rewritten by S4n |
 | 🤖 AI Brain | OpenAI, Cohere, Shipu APIs |
 
 ---
@@ -150,8 +150,3 @@ Pull requests, bug reports, and ideas are welcome!
 - Add your module to `/scripts/cmds/`
 - Test and PR
 - Let's build the ultimate AI bot together 💪
-
----
-
-> 💖 **Zaraki AI: More than a bot. A stylish, cyberpunk AI friend.**  
-> — _Voldigo zaraki anos_
