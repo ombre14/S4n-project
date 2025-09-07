@@ -55,7 +55,7 @@
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/voldy-coder/projet-zaraki-anos.git
+git clone https://github.com/ombre14/S4n-project/tree/main
 cd zarakibot
 npm install
 ```
