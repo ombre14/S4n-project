@@ -16,14 +16,14 @@
 
 ---
 
-> 🧩 **Zaraki AI** is a futuristic, modular, and highly customized Messenger automation + chatbot system based on NTkhang's GoatBot V2 — but **rewritten**, **refactored**, and **reborn** with AI brains, cyberpunk visuals, and MongoDB support.
+> 🧩 **S4n AI** is a futuristic, modular, and highly customized Messenger automation + chatbot system based on NTkhang's GoatBot V2 — but **rewritten**, **refactored**, and **reborn** with AI brains, cyberpunk visuals, and MongoDB support.
 
 ---
 
 ## ⚠️ Disclaimer
 
 > This is **not the official version** of GoatBot by NTkhang.  
-> It is a **heavily modified** fork maintained independently by **Voldigo Zaraki Anos**, with deep changes to command logic, memory system, UI/UX, and AI functionality.  
+> It is a **heavily modified** fork maintained independently by **Cedric San**, with deep changes to command logic, memory system, UI/UX, and AI functionality.  
 > All credits to the original GoatBot base go to [NTkhang](https://github.com/ntkhang03/goatbot-v2).
 
 ---
