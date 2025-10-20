@@ -1,7 +1,7 @@
 {
 	"facebookAccount": {
-		"email": "rosius14@gmail.com",
-		"password": "rosius1402@@",
+		"email": "reuf1402@gmail.com",
+		"password": "r3uf140208",
 		"2FASecret": "",
 		"i_user": "",
 		"proxy": null,
@@ -12,17 +12,17 @@
 	"antiInbox": true,
 	"language": "en",
 	"notesLanguage": "change to your language with ISO 639-1 code, available languages: vi (Vietnamese), en (English)",
-	"nickNameBot": "꧁ 𝚂4𝙽 - 𝙱𝙾𝚃 ꧂ ➪ 🖤",
+	"nickNameBot": "꧁ SAYEN'Z - 𝙱𝙾𝚃 ꧂ ➪ 🖤",
 	"prefix": "🖤",
 	"adminOnly": {
 		"enable": false,
 		"ignoreCommand": []
 	},
 	"adminBot": [
-		"61559338025856"
+		"61565649432299"
 	],
 	"nisanBot": [
-		"61559338025856"
+		"61565649432299"
 	],
 	"notes": "YOUR GROUP ID or Tid ID SET NOW , BECAUSE BOT LOGS MESSAGE SENT YOUR GROUP",
 	"whiteListMode": {
