@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const Prefixes = ["ai", "anjara", "ae"];
+const Prefixes = ["ai"];
 const RP = "Ajoute des Emojis et répond à la question";
 
 const fonts = {
@@ -43,9 +43,8 @@ async function sendImages(images, message) {
 module.exports = {
   config: {
     name: "ai",
-    aliases: ["ae"],
     version: "2.2",
-    author: "Aesther",
+    author: "DAEMON",
     countDown: 2,
     role: 0,
     shortDescription: "🤖 AI + images multiples",
