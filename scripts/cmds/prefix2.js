@@ -5,7 +5,7 @@ module.exports = {
   config: {
     name: "prefix",
     version: "1.5",
-    author: "Ew'r Saim",
+    author: "DAEMON",
     countDown: 5,
     role: 0,
     description: "Change the bot prefix in this chat or globally (admin only)",
@@ -94,7 +94,7 @@ module.exports = {
         `👋 𝐇𝐞𝐲 ${userName}, 𝐝𝐢𝐝 𝐲𝐨𝐮 𝐚𝐬𝐤 𝐟𝐨𝐫 𝐦𝐲 𝐩𝐫𝐞𝐟𝐢𝐱?\n` +
         `➥ 🌐 𝐆𝐥𝐨𝐛𝐚𝐥: ${globalPrefix}\n` +
         `➥ 💬 𝐓𝐡𝐢𝐬 𝐂𝐡𝐚𝐭: ${threadPrefix}\n` +
-        `𝐈'𝐦 , 𝑽𝑶𝑳𝑫𝑰𝑮𝑶_𝒁𝑨𝑹𝑨𝑲𝑰_𝑨𝑵𝑶𝑺 𝐧𝐢𝐜𝐞 𝐭𝐨 𝐦𝐞𝐞𝐭 𝐲𝐨𝐮! `
+        `𝐈'𝐦 , SAYEN'Z  𝐧𝐢𝐜𝐞 𝐭𝐨 𝐦𝐞𝐞𝐭 𝐲𝐨𝐮! `
       );
     }
   }
