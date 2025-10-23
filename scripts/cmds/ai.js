@@ -1,136 +1,121 @@
-const axios = require("axios");
+const a = require('axios');
+const b = require('valid-url');
+const c = require('fs');
+const d = require('path');
+const e = require('uuid').v4;
 
-const Prefixes = ["ai"];
-const RP = "Ajoute des Emojis et répond à la question";
+const f = "https://orochiai.vercel.app/chat";
+const g = "https://orochiai.vercel.app/chat/clear";
+const h = d.join(__dirname, 'tmp');
+if (!c.existsSync(h)) c.mkdirSync(h);
 
-const fonts = {
-  a: "𝗮", b: "𝗯", c: "𝗰", d: "𝗱", e: "𝗲", f: "𝗳", g: "𝗴", h: "𝗵", i: "𝗶",
-  j: "𝗷", k: "𝗸", l: "𝗹", m: "𝗺", n: "𝗻", o: "𝗼", p: "𝗽", q: "𝗾", r: "𝗿",
-  s: "𝘀", t: "𝘁", u: "𝘂", v: "𝘃", w: "𝘄", x: "𝘅", y: "𝘆", z: "𝘇",
-  A: "𝗔", B: "𝗕", C: "𝗖", D: "𝗗", E: "𝗘", F: "𝗙", G: "𝗚", H: "𝗛", I: "𝗜",
-  J: "𝗝", K: "𝗞", L: "𝗟", M: "𝗠", N: "𝗡", O: "𝗢", P: "𝗣", Q: "𝗤", R: "𝗥",
-  S: "𝗦", T: "𝗧", U: "𝗨", V: "𝗩", W: "𝗪", X: "𝗫", Y: "𝗬", Z: "𝗭"
+const i = async (j, k) => {
+  const l = d.join(h, `${e()}.${k}`);
+  const m = await a.get(j, { responseType: 'arraybuffer' });
+  c.writeFileSync(l, Buffer.from(m.data));
+  return l;
 };
 
-function applyFont(text) {
-  return text.split('').map(char => fonts[char] || char).join('');
-}
-
-function splitMessage(text, max = 2000) {
-  const chunks = [];
-  for (let i = 0; i < text.length; i += max) {
-    chunks.push(text.substring(i, i + max));
+const n = async (o, p, q) => {
+  o.setMessageReaction("♻", p.messageID, () => {}, true);
+  try {
+    await a.delete(`${g}/${p.senderID}`);
+    return q.reply(`✅ Conversation reset for UID: ${p.senderID}`);
+  } catch (r) {
+    console.error('❌ Reset Error:', r.message);
+    return q.reply("❌ Reset failed. Try again.");
   }
-  return chunks;
-}
+};
 
-function extractImages(text) {
-  const regex = /(https?:\/\/[^\s]+?\.(jpg|jpeg|png|webp|gif))/gi;
-  return [...new Set(text.match(regex) || [])];
-}
+const s = async (t, u, v, w, x = false) => {
+  const y = u.senderID;
+  let z = v, A = null;
+  t.setMessageReaction("⏳", u.messageID, () => {}, true);
 
-async function sendImages(images, message) {
-  for (const url of images) {
-    try {
-      const stream = await global.utils.getStreamFromURL(url);
-      await message.reply({ attachment: stream });
-    } catch (e) {
-      console.log(`❌ Erreur image : ${url}`);
+  if (u.messageReply) {
+    const B = u.messageReply;
+    if (B.senderID !== global.GoatBot?.botID && B.body) {
+      const C = B.body.length > 300 ? B.body.slice(0, 300) + "..." : B.body;
+      z += `\n\n📌 Reply:\n"${C}"`;
     }
+    const D = B.attachments?.[0];
+    if (D?.type === 'photo') A = D.url;
   }
-}
+
+  const E = z.match(/(https?:\/\/[^\s]+)/)?.[0];
+  if (E && b.isWebUri(E)) {
+    A = E;
+    z = z.replace(E, '').trim();
+  }
+
+  if (!z && !A) {
+    t.setMessageReaction("❌", u.messageID, () => {}, true);
+    return w.reply("💬 Provide a message or image.");
+  }
+
+  try {
+    const F = await a.post(f, { uid: y, message: z, image_url: A }, { timeout: 45000 });
+    const { reply: G, image_url: H, music_data: I, shotti_data: J } = F.data;
+    let K = G || '✅ AI Response:', L = [];
+
+    if (H) try { L.push(c.createReadStream(await i(H, 'jpg'))); } catch { K += '\n🖼 Image failed.'; }
+    if (I?.downloadUrl) try { L.push(c.createReadStream(await i(I.downloadUrl, 'mp3'))); } catch { K += '\n🎵 Music failed.'; }
+    if (J?.videoUrl) try { L.push(c.createReadStream(await i(J.videoUrl, 'mp4'))); } catch { K += '\n🎬 Video failed.'; }
+
+    const M = await w.reply({ body: K, attachment: L.length > 0 ? L : undefined });
+    global.GoatBot.onReply.set(M.messageID, { commandName: 'ai', messageID: M.messageID, author: y });
+    t.setMessageReaction("✅", u.messageID, () => {}, true);
+  } catch (N) {
+    console.error("❌ API Error:", N.response?.data || N.message);
+    t.setMessageReaction("❌", u.messageID, () => {}, true);
+    let O = "⚠ AI Error:\n\n";
+    if (N.code === 'ECONNABORTED' || N.message.includes('timeout')) O += "⏱ Timeout. Try again.";
+    else if (N.response?.status === 429) O += "🚦 Too many requests. Slow down.";
+    else O += "❌ Unexpected error.";
+    return w.reply(O);
+  }
+};
 
 module.exports = {
   config: {
-    name: "ai",
-    version: "2.2",
-    author: "DAEMON",
-    countDown: 2,
+    name: 'ai',
+    aliases: [],
+    version: '1.0.0',
+    author: 'Aryan Chauhan',
     role: 0,
-    shortDescription: "🤖 AI + images multiples",
-    longDescription: "Pose une question à l’IA et reçois du texte stylisé et toutes les images en direct.",
-    category: "ai",
-    guide: "{pn} <question>"
-  },
-
-  onStart: async function ({ message, args, event, api }) {
-    const prompt = args.join(" ").trim();
-    if (!prompt) return message.reply("❌ Pose une question à l’IA.");
-
-    try {
-      const url = `https://haji-mix-api.gleeze.com/api/groq?ask=${encodeURIComponent(prompt)}&model=llama-3.3-70b-versatile&uid=56666&RP=${encodeURIComponent(RP)}&stream=True`;
-      const res = await axios.get(url, { timeout: 20000 });
-
-      const raw = res.data?.answer || res.data?.result || res.data?.message || "🤖 Aucune réponse reçue.";
-      const styled = applyFont(raw);
-      const images = extractImages(raw);
-      const chunks = splitMessage(styled);
-      const sent = [];
-
-      for (const chunk of chunks) {
-        const msg = await message.reply(chunk);
-        sent.push(msg.messageID);
-        global.GoatBot.onReply.set(msg.messageID, {
-          commandName: this.config.name,
-          author: event.senderID
-        });
-        setTimeout(() => global.GoatBot.onReply.delete(msg.messageID), 2 * 60 * 1000);
-      }
-
-      await sendImages(images, message);
-
-      setTimeout(() => {
-        for (const id of sent) api.unsendMessage(id);
-      }, 60 * 1000);
-
-    } catch (err) {
-      console.error(err.message);
-      return message.reply(applyFont("❌ Erreur de réponse IA."));
+    category: 'ai',
+    longDescription: { en: 'AI chat, image gen, music/video, and reset' },
+    guide: {
+      en: `
+.ai [your message]
+• 🤖 Chat, 🎨 Image, 🎵 Music, 🎬 Video
+• Reply to image/message for context
+• Reply or type "clear" to reset
+• Say: ai [msg] (no prefix needed)
+      `
     }
   },
 
-  onChat: async function ({ event, message, api }) {
-    if (!event.body) return;
-    const prefix = Prefixes.find(p => event.body.toLowerCase().startsWith(p.toLowerCase()));
-    if (!prefix) return;
-
-    const args = event.body.slice(prefix.length).trim().split(/\s+/);
-    this.onStart({ message, args, event, api });
+  onStart: async function ({ api: a, event: b, args: c, message: d }) {
+    const e = c.join(' ').trim();
+    if (!e) return d.reply("❗ Please enter a message.");
+    if (['clear', 'reset'].includes(e.toLowerCase())) return await n(a, b, d);
+    return await s(a, b, e, d);
   },
 
-  onReply: async function ({ event, message, Reply, api }) {
-    if (event.senderID !== Reply.author) return;
-    const prompt = event.body.trim();
+  onReply: async function ({ api: a, event: b, Reply: c, message: d }) {
+    if (b.senderID !== c.author) return;
+    const e = b.body?.trim();
+    if (!e) return;
+    if (['clear', 'reset'].includes(e.toLowerCase())) return await n(a, b, d);
+    return await s(a, b, e, d, true);
+  },
 
-    try {
-      const url = `https://haji-mix-api.gleeze.com/api/groq?ask=${encodeURIComponent(prompt)}&model=llama-3.3-70b-versatile&uid=56666&RP=${encodeURIComponent(RP)}&stream=True`;
-      const res = await axios.get(url, { timeout: 20000 });
-
-      const raw = res.data?.answer || res.data?.result || res.data?.message || "🤖 Rien reçu.";
-      const styled = applyFont(raw);
-      const images = extractImages(raw);
-      const chunks = splitMessage(styled);
-      const sent = [];
-
-      for (const chunk of chunks) {
-        const msg = await message.reply(chunk);
-        sent.push(msg.messageID);
-        global.GoatBot.onReply.set(msg.messageID, {
-          commandName: this.config.name,
-          author: event.senderID
-        });
-        setTimeout(() => global.GoatBot.onReply.delete(msg.messageID), 120000);
-      }
-
-      await sendImages(images, message);
-
-      setTimeout(() => {
-        for (const id of sent) api.unsendMessage(id);
-      }, 60 * 1000);
-
-    } catch (err) {
-      console.error(err.message);
-      return message.reply(applyFont("❌ Réponse IA échouée."));
-    }
+  onChat: async function ({ api: a, event: b, message: c }) {
+    const d = b.body?.trim();
+    if (!d?.toLowerCase().startsWith('ai ')) return;
+    const e = d.slice(3).trim();
+    if (!e) return;
+    return await s(a, b, e, c);
   }
 };
